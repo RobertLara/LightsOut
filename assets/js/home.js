@@ -1,5 +1,5 @@
 $(function() {
-    setInterval(loadRecord, 3000);
+    setInterval(loadRecord, 10000);
 });
 
 

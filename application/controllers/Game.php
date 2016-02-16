@@ -28,22 +28,10 @@ class Game extends CI_Controller {
 	public function getGame($level = null){
 
         if($level==null){
-            $this->index();
-            return false;
+            echo json_encode(array('error'=>"level not set",'level'=>null));
+        }else{
+            echo json_encode(array('level'=>$this->lightout_model->getGame($level)));
         }
-
-        //$data['getGame'] = $this->lightout_model->getGame($level);
-        echo json_encode(array('level'=>$this->lightout_model->getGame($level)));
-
-        //$this->load->helper('url');
-        //$data['js_to_load']='lightsout.js';
-        //$this->load->view('tpl/header');
-        //$this->load->view('tpl/headerNavbar');
-
-
-        //$this->load->view('game/game',$data);
-        //$this->load->view('tpl/footer');
-
     }
 
     public function saveRecord($level,$time,$moves){

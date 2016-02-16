@@ -1,5 +1,3 @@
 $(function() {
-    setInterval(loadRecord, 10000);
+    setInterval(loadRecord, 100000);
 });
-
-

@@ -60,16 +60,22 @@ function makeBoard(level) {
     $('#game .modal-body').html('<div id="board" class="container-fluid text-center"></div>');
     var board = $('#game #board');
     for (var i = 0; i < 5; i++) {
-        $(board).append('<div class="row"></div>');
+        $(board).append('<div class="row" data-row="' + i + '"></div>');
     }
     var rows = $(board).find('.row');
     $(rows).each(function (index, value) {
         for (var i = 0; i < 5; i++) {
+            var node = $('<div>');
+            node.addClass('position');
+            node.attr('data-col', i);
             if (level.charAt((index * 5) + i) == '1') {
-                $(this).append('<div class="position active"></div>');
-            } else {
-                $(this).append('<div class="position"></div>');
+                node.addClass('active');
             }
+            $(node).click(function (e) {
+                play($(this));
+            });
+
+            $(this).append(node);
         }
     });
     $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>0</span></div>');
@@ -111,4 +117,24 @@ function clock_start() {
 function clock_reset() {
     timestart = null;
     document.timeform.timetextarea.value = "00:00";
+}
+
+function play(elem) {
+    countMoves();
+    var row = elem.parent().data('row');
+    var col = elem.data('col');
+
+    elem.toggleClass('active');
+    $('.row[data-row="' + (row + 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
+    $('.row[data-row="' + (row) + '"] .position[data-col="' + (col + 1) + '"]').toggleClass('active');
+    $('.row[data-row="' + (row) + '"] .position[data-col="' + (col - 1) + '"]').toggleClass('active');
+    $('.row[data-row="' + (row - 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
+
+    if($('#board .active').size()==0){
+        console.log("End game");
+    }
+}
+
+function countMoves(){
+    $('#clicksCount span').html(parseInt($('#clicksCount span').html(),10)+1);
 }

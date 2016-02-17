@@ -14,7 +14,7 @@
 
                 <?php if ($this->session->userdata('logged_in')): ?>
                     <?php if ($this->session->userdata('role')==1): ?>
-                        <li><a href="<?php echo base_url('main/dashboard'); ?>">Gestio d'usuaris</a></li>
+                        <li><a href="<?php echo base_url('main/dashboard'); ?>">Gestió</a></li>
                     <?php endif; ?>
                     <li><a href="<?php echo base_url('game'); ?>">Panell de control</a></li>
                     <li><a href="<?php echo base_url('main/logout');?>">Tancar sessió</a></li>

@@ -49,6 +49,24 @@ class Game extends CI_Controller {
         }
     }
 
+    public function saveLevel($structure){
+        if ($this->session->userdata('role') != 1) {
+            header('Location: ../error/e403');
+            exit();
+        }
+
+        if($this->session->userdata('role')==1){
+            if($this->lightout_model->saveLevel($structure)){
+                echo json_encode(array('response'=>"Save"));
+            }else{
+                echo json_encode(array('response'=>"Not save"));
+            }
+
+        }else{
+            echo json_encode(array('response'=>"403"));
+        }
+    }
+
     public function makeGame($board){
         if($this->session->userdata('logged_in')){
             if($this->session->userdata('role')==1){

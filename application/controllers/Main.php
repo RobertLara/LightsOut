@@ -98,6 +98,7 @@ class Main extends CI_Controller
         }
         $data['users'] = $this->user_model->getAllUser();
 
+        $data['js_to_load']='dashboard.js';
         $this->load->helper('url');
         $this->load->view('tpl/header');
         $this->load->view('tpl/headerNavbar');

@@ -5,6 +5,24 @@
 </style>
 
 
+<div id="makeBoard" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Creació d'un nou nivell</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tancar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <div id="headerwrap">
     <div class="container">
         <div class="row">
@@ -50,19 +68,19 @@
                 <br/>
 
                 <div class="form-group ">
-                    <button type="submit" name="log-me-in" id="submit" tabindex="5" class="btn btn-lg btn-primary">
+                    <button type="submit" name="log-me-in" id="submit" tabindex="5" class="btn btn-lg btn-success">
                         Afegir nou usuari
                     </button>
                 </div>
                 <?php echo form_close(); ?>
 
-
-
-
             </div>
 
+
         </div>
-        <!-- /row -->
+        <div class="row col-md-offset-2 col-sm-offset-2">
+            <button id="openMakeBoard" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#makeBoard">Crear nou nivell</button>
+        </div>
     </div>
     <!-- /container -->
 </div><!-- /headerwrap -->

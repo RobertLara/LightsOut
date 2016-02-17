@@ -6,6 +6,7 @@
                 <div class="col-xs-12 text-right">
                     <div class="huge"><i class="fa fa-star"></i><?php echo $i + 1; ?><i class="fa fa-star"></i></div>
                     <div>
+                        <span>
                         <?php
                         if ($getRankingTime[$i]->time == null) {
                             echo "No definit";
@@ -13,9 +14,11 @@
                             echo $getRankingTime[$i]->time;
                         }
                         ?>
+                        </span>
                         <i class="fa fa-clock-o"></i>
                     </div>
                     <div>
+                        <span>
                         <?php
                         if ($getRankingMoves[$i]->moves == 0){
                             echo "No definit";
@@ -23,6 +26,7 @@
                             echo $getRankingMoves[$i]->moves;
                         }
                         ?>
+                        </span>
                         <i class="fa fa-hand-pointer-o"></i>
                     </div>
                 </div>

@@ -38,6 +38,10 @@ p {
     font-size: 16px;
 }
 
+table {
+    background-color: #D1D1D1;
+}
+
 .centered {
     text-align: center;
 }
@@ -247,4 +251,7 @@ i {
 input[name='timetextarea'] {
     background-color: transparent;
     border: 0px;
+}
+#recordUser{
+    display: none;
 }

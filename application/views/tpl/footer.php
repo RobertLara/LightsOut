@@ -4,7 +4,7 @@
 <?php
 
 if(isset($js_to_load)){
-    if($js_to_load!=''){
+    if(is_array($js_to_load)!=''){
 
         foreach($js_to_load as $file){
             echo '<script type="text/javascript" src="';
@@ -12,6 +12,10 @@ if(isset($js_to_load)){
             echo '"></script>';
         }
 
+    }else{
+        echo '<script type="text/javascript" src="';
+        echo base_url("assets/js/".$js_to_load);
+        echo '"></script>';
     }
 
 }

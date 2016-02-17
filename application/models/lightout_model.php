@@ -124,6 +124,17 @@ class LightOut_model extends CI_Model
 
     public function saveRecord($id_user, $level, $time, $clicks)
     {
+        $this->db->select('min(time) as time, min(clicks) as moves');
+        $this->db->from('ranking');
+        $this->db->where('id_user', $id_user);
+        $this->db->where('id_level', $level);
+        $response = $this->db->get()->result();
+        if(isset($response[0])){
+            if($response[0]->moves <= $clicks && $response[0]->time <= $time && $response[0]->time!=null && $response[0]->moves!=null){
+                return false;
+            }
+        }
+
         $data = array(
             'id_user' => $id_user,
             'id_level' => $level,

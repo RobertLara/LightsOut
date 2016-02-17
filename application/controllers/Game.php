@@ -36,8 +36,16 @@ class Game extends CI_Controller {
 
     public function saveRecord($level,$time,$moves){
         if($this->session->userdata('logged_in')){
+            $time = "00:".$time;
             $id_user = $this->session->userdata['id_user'];
-            $this->lightout_model->saveRecord($id_user,$level,$time,$moves);
+            if($this->lightout_model->saveRecord($id_user,$level,$time,$moves)){
+                echo json_encode(array('response'=>"Save"));
+            }else{
+                echo json_encode(array('response'=>"Not save"));
+            }
+
+        }else{
+            echo json_encode(array('response'=>"User no login"));
         }
     }
 

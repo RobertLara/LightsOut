@@ -4,61 +4,31 @@ $(function () {
         $('#game').modal('show');
     });
 
-    function loadGame(level) {
-
-        $.ajax({
-            url: '/Codeigniter/game/getGame/' + level,
-            type: 'post',
-            dataType: 'json',
-            beforeSend: function () {
-                $('#game .modal-body').html('<i class="fa fa-spinner fa-spin"></i> Generant...');
-            },
-            success: function (response) {
-                makeBoard(response.level);
-
-            }
-        });
-
-    }
-
 });
 
 var timercount = 0;
 var timestart = null;
 
+function loadGame(level) {
 
-function loadUserRecord() {
     $.ajax({
-        url: '/Codeigniter/game/getUserRankings',
+        url: '/Codeigniter/game/getGame/' + level,
         type: 'post',
         dataType: 'json',
         beforeSend: function () {
-
+            $('#game .modal-body').html('<i class="fa fa-spinner fa-spin"></i> Generant...');
         },
         success: function (response) {
-            console.log(response);
-        }
-    });
-}
-
-function loadRecord() {
-    $.ajax({
-        url: '/Codeigniter/game/getRankings',
-        type: 'post',
-        dataType: 'json',
-        beforeSend: function () {
-
-        },
-        success: function (response) {
-            console.log(response);
+            makeBoard(level, response.level);
         }
     });
 
 }
 
-function makeBoard(level) {
+function makeBoard(id, level) {
     $('#game .modal-body').html('<div id="board" class="container-fluid text-center"></div>');
     var board = $('#game #board');
+    board.attr('data-level', id);
     for (var i = 0; i < 5; i++) {
         $(board).append('<div class="row" data-row="' + i + '"></div>');
     }
@@ -130,11 +100,77 @@ function play(elem) {
     $('.row[data-row="' + (row) + '"] .position[data-col="' + (col - 1) + '"]').toggleClass('active');
     $('.row[data-row="' + (row - 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
 
-    if($('#board .active').size()==0){
-        console.log("End game");
+    if ($('#board .active').size() == 0) {
+        saveRecord(
+            $('#board').data('level'),
+            $('input[name="timetextarea"]').val(),
+            parseInt($('#clicksCount span').html(), 10)
+        );
     }
 }
 
-function countMoves(){
-    $('#clicksCount span').html(parseInt($('#clicksCount span').html(),10)+1);
+function countMoves() {
+    $('#clicksCount span').html(parseInt($('#clicksCount span').html(), 10) + 1);
 }
+
+function saveRecord(level, time, moves) {
+    $.ajax({
+        url: '/Codeigniter/game/saveRecord/' + level + "/" + time + "/" + moves,
+        type: 'post',
+        dataType: 'json',
+        beforeSend: function () {
+
+        },
+        success: function (response) {
+            loadGlobalRecord();
+            loadUserRecord();
+            console.log(response);
+        }
+    });
+
+
+}
+
+function loadUserRecord() {
+    $.ajax({
+        url: '/Codeigniter/game/getUserRankings',
+        type: 'post',
+        dataType: 'json',
+        success: function (response) {
+            console.log(response);
+            var box = $('#recordUser .panel-yellow');
+            $(box).each(function (i, value) {
+                if (response.getUserRankingTime[i].time !== null) {
+                    $('.fa-clock-o', this).prev().html(response.getUserRankingTime[i].time);
+                }
+                if (response.getUserRankingMoves[i].moves !== 0) {
+                    $('.fa-hand-pointer-o', this).prev().html(response.getUserRankingMoves[i].moves);
+                }
+
+
+            });
+        }
+    });
+}
+
+function loadGlobalRecord() {
+    $.ajax({
+        url: '/Codeigniter/game/getRankings',
+        type: 'post',
+        dataType: 'json',
+        success: function (response) {
+            var box = $('#recordGlobal .panel-yellow');
+            $(box).each(function (i, value) {
+                if (response.getRankingTime[i].time !== null) {
+                    $('.fa-clock-o', this).prev().html(response.getRankingTime[i].time);
+                }
+                if (response.getRankingMoves[i].moves !== 0) {
+                    $('.fa-hand-pointer-o', this).prev().html(response.getRankingMoves[i].moves);
+                }
+
+
+            });
+        }
+    });
+}
+

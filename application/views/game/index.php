@@ -12,12 +12,10 @@
                 if(isset($getGames)){
 
                     for($i=0;$i<$getGames;$i++){
-                        include('application/views/game/box_link.php');
+                        include('application/views/game/box_level_user.php');
                     }
 
                 }
-
-
 
                 ;?>
             </div>

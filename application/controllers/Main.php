@@ -17,6 +17,12 @@ class Main extends CI_Controller
         $data['getRankingMoves'] = $this->lightout_model->getRankingMoves();
         $data['getRankingTime'] = $this->lightout_model->getRankingTime();
 
+        if($this->session->userdata('logged_in')){
+            $id_user = $this->session->userdata['id_user'];
+            $data['getUserRankingTime'] = $this->lightout_model->getUserRankingTime($id_user);
+            $data['getUserRankingMoves'] = $this->lightout_model->getUserRankingMoves($id_user);
+        }
+
         $this->load->helper('url');
         $this->load->view('tpl/header');
         $this->load->view('tpl/headerNavbar');

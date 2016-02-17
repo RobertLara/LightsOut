@@ -3,14 +3,33 @@
         <div class="row">
             <div class="col-lg-7 col-md-7 col-xs-12 col-sm-6">
 
-                <div class="row">
+                <div class="row text-center">
+                <button id="showGlobal" type="button" class="btn btn-success active">Records Globals</button>
+                <button id="showUser" type="button" class="btn btn-success">Records Personals</button>
+                </div>
+                <br />
+                <div class="row" id="recordGlobal">
 
                     <?php
 
                     if(isset($getGames)){
 
                         for($i=0;$i<$getGames;$i++){
-                            include('application/views/game/box_level.php');
+                            include('application/views/game/box_level_global.php');
+                        }
+                    }
+
+                    ?>
+                </div>
+
+                <div class="row" id="recordUser">
+
+                    <?php
+
+                    if(isset($getGames)){
+
+                        for($i=0;$i<$getGames;$i++){
+                            include('application/views/game/box_level_user.php');
                         }
                     }
 

@@ -11,6 +11,10 @@ class Game extends CI_Controller {
 
 	public function index()
 	{
+        if($this->session->userdata('logged_in')==false){
+            header('Location: ./error/e403');
+            exit();
+        }
         $id_user = $this->session->userdata['id_user'];
         $data['js_to_load']='game.js';
         $data['getGames'] = $this->lightout_model->getGames();

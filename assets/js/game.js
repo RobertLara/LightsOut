@@ -4,6 +4,15 @@ $(function () {
         $('#game').modal('show');
     });
 
+    $("#btnCloseGame").click(function () {
+        $('#game').modal('hide');
+    });
+
+    $("#btnReloadGame").click(function () {
+        loadGame($('#board').data('level'));
+    });
+
+
 });
 
 var timercount = 0;
@@ -51,7 +60,7 @@ function makeBoard(id, level) {
     $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>0</span></div>');
     $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="00:00" size="2"></form>');
     clock_reset();
-    clock_start();
+    clock_stop();
 
 }
 
@@ -89,6 +98,26 @@ function clock_reset() {
     document.timeform.timetextarea.value = "00:00";
 }
 
+function clock_stop(){
+    if (timercount){
+        clearTimeout(timercount);
+        timercount = 0;
+        var timeEnd = new Date();
+        var timeDifference = timeEnd.getTime() - timestart.getTime();
+        timeEnd.setTime(timeDifference);
+        var minutesPassed = timeEnd.getMinutes();
+        if (minutesPassed < 10) {
+            minutesPassed = "0"+minutesPassed;
+        }
+        var secondsPassed = timeEnd.getSeconds();
+        if (secondsPassed < 10) {
+            secondsPassed = "0"+secondsPassed;
+        }
+        document.timeform.timetextarea.value = minutesPassed+":"+secondsPassed;
+    }
+    timestart = null;
+}
+
 function play(elem) {
     countMoves();
     var row = elem.parent().data('row');
@@ -101,6 +130,7 @@ function play(elem) {
     $('.row[data-row="' + (row - 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
 
     if ($('#board .active').size() == 0) {
+        clock_stop();
         saveRecord(
             $('#board').data('level'),
             $('input[name="timetextarea"]').val(),
@@ -110,6 +140,10 @@ function play(elem) {
 }
 
 function countMoves() {
+    if($('#clicksCount span').text()=='0'){
+        clock_start();
+    }
+
     $('#clicksCount span').html(parseInt($('#clicksCount span').html(), 10) + 1);
 }
 
@@ -119,12 +153,13 @@ function saveRecord(level, time, moves) {
         type: 'post',
         dataType: 'json',
         beforeSend: function () {
-
+            $('#modalInfo').modal('show');
+            $('#modalInfo .modal-body').html("Gracies per jugar");
         },
         success: function (response) {
             loadGlobalRecord();
             loadUserRecord();
-            console.log(response);
+            $('#modalInfo .modal-body').html('<div class="alert alert-info">'+response.response+'</div>');
         }
     });
 

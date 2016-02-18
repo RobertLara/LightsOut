@@ -39,13 +39,13 @@ class Game extends CI_Controller {
             $time = "00:".$time;
             $id_user = $this->session->userdata['id_user'];
             if($this->lightout_model->saveRecord($id_user,$level,$time,$moves)){
-                echo json_encode(array('response'=>"Save"));
+                echo json_encode(array('response'=>"Enhorabona!! Has fet un nou record!!"));
             }else{
-                echo json_encode(array('response'=>"Not save"));
+                echo json_encode(array('response'=>"No has fet record."));
             }
 
         }else{
-            echo json_encode(array('response'=>"User no login"));
+            echo json_encode(array('response'=>"No t'has regsitrat. El record no sera guardat"));
         }
     }
 
@@ -57,13 +57,13 @@ class Game extends CI_Controller {
 
         if($this->session->userdata('role')==1){
             if($this->lightout_model->saveLevel($structure)){
-                echo json_encode(array('response'=>"Save"));
+                echo json_encode(array('response'=>"Nivell desat amb exit"));
             }else{
-                echo json_encode(array('response'=>"Not save"));
+                echo json_encode(array('response'=>"Nivell no deat"));
             }
 
         }else{
-            echo json_encode(array('response'=>"403"));
+            echo json_encode(array('response'=>"No tens permisos. Com has arribat aqui?"));
         }
     }
 

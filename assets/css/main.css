@@ -255,3 +255,9 @@ input[name='timetextarea'] {
 #recordUser{
     display: none;
 }
+
+span.username{
+    display: block;
+    text-align: center;
+    font-weight: bold;
+}

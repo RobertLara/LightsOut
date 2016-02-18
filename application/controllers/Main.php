@@ -13,6 +13,7 @@ class Main extends CI_Controller
     public function index()
     {
         $data['js_to_load']=array('home.js','game.js');
+        $data['css_to_load']='http://fonts.googleapis.com/css?family=Orbitron';
         $data['getGames'] = $this->lightout_model->getGames();
         $data['getRankingMoves'] = $this->lightout_model->getRankingMoves();
         $data['getRankingTime'] = $this->lightout_model->getRankingTime();

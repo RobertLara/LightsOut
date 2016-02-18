@@ -36,6 +36,7 @@ function loadGame(level) {
 
 function makeBoard(id, level) {
     $('#game .modal-body').html('<div id="board" class="container-fluid text-center"></div>');
+    $('#game .modal-title').html('<i class="fa fa-star fa-gold"></i> Nivell '+id+' <i class="fa fa-star fa-gold"></i>')
     var board = $('#game #board');
     board.attr('data-level', id);
     for (var i = 0; i < 5; i++) {

@@ -101,5 +101,35 @@ class Game extends CI_Controller {
         }
 
     }
+
+    function getGameTmp($level){
+        if($this->session->userdata('logged_in')){
+            $id_user = $this->session->userdata['id_user'];
+            $response = $this->lightout_model->getGameTmp($id_user,$level);
+            if($response!==false){
+                echo json_encode($response);
+                $this->lightout_model->deleteGameTmp($id_user,$level);
+            }else{
+                echo json_encode(array('response'=>"No s'ha trobat la partida"));
+            }
+        }else{
+            echo json_encode(array('response'=>"No t'has regsitrat. No s'ha pogut desar la partida"));
+        }
+    }
+
+    function saveGameTmp($level,$structure,$time,$clicks){
+        if($this->session->userdata('logged_in')){
+            $id_user = $this->session->userdata['id_user'];
+            if($this->lightout_model->saveGameTmp($id_user,$level,$structure,$time,$clicks)){
+                echo json_encode(array('response'=>"Partida desada"));
+            }else{
+                echo json_encode(array('response'=>"No s'ha desat la partida"));
+            }
+        }else{
+            echo json_encode(array('response'=>"No t'has regsitrat. No s'ha pogut desar la partida"));
+        }
+
+
+    }
 	
 }

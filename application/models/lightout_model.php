@@ -142,6 +142,10 @@ class LightOut_model extends CI_Model
 
     public function saveRecord($id_user, $level, $time, $clicks)
     {
+        if($this->getGameTmp($id_user,$level)!==false){
+            $this->deleteGameTmp($id_user,$level);
+        }
+
         $this->db->select('min(time) as time, min(clicks) as moves');
         $this->db->from('ranking');
         $this->db->where('id_user', $id_user);
@@ -188,9 +192,50 @@ class LightOut_model extends CI_Model
         );
 
         $this->db->insert('levels', $data);
-        $num_inserts = $this->db->affected_rows();
+        $affected = $this->db->affected_rows();
 
-        return ($num_inserts == 1) ? true : false;
+        return ($affected == 1) ? true : false;
 
     }
+
+    public function saveGameTmp($id_user, $level,$structure,$time,$clicks){
+
+        $data = array(
+            'id_level' => $level,
+            'id_user' => $id_user,
+            'status' => $structure,
+            'time' => $time,
+            'clicks' => $clicks
+        );
+
+        $this->db->insert('tmp_level', $data);
+        $affected = $this->db->affected_rows();
+
+        return ($affected == 1) ? true : false;
+
+    }
+
+    public function deleteGameTmp($id_user,$level){
+        $this->db->delete('tmp_level', array('id_user' => $id_user,'id_level'=>$level));
+        $affected = $this->db->affected_rows();
+
+        return ($affected == 1) ? true : false;
+
+    }
+
+    public function getGameTmp($id_user,$level){
+        $this->db->select('status, time, clicks');
+        $this->db->from('tmp_level');
+        $this->db->where('id_level', $level);
+        $this->db->where('id_user', $id_user);
+        $response = $this->db->get()->result();
+        var_dump($response);
+
+        if (isset($response[0])) {
+            return $response[0];
+        } else {
+            return false;
+        }
+    }
+
 }

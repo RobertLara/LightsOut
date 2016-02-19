@@ -13,7 +13,6 @@ class Main extends CI_Controller
     public function index()
     {
         $data['js_to_load']=array('home.js','game.js');
-        $data['css_to_load']='http://fonts.googleapis.com/css?family=Orbitron';
         $data['getGames'] = $this->lightout_model->getGames();
         $data['getRankingMoves'] = $this->lightout_model->getRankingMoves();
         $data['getRankingTime'] = $this->lightout_model->getRankingTime();
@@ -111,12 +110,25 @@ class Main extends CI_Controller
     public function deleteUser()
     {
 
+        if ($this->session->userdata('role') != 1) {
+            header('Location: ../error/e403');
+            exit();
+        }
+
         if (isset($_POST['id_user'])) {
             $this->user_model->deleteUser($_POST['id_user']);
         }
 
         header('Location: ../main/dashboard');
 
+    }
+
+
+    public function deleteMyAccount(){
+        if($this->session->userdata('logged_in')){
+            $id_user = $this->session->userdata['id_user'];
+            $this->user_model->deleteUser($id_user);
+        }
     }
 
 }

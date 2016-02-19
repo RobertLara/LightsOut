@@ -17,6 +17,7 @@ $(function () {
 
 var timercount = 0;
 var timestart = null;
+var level_structure = null;
 
 function loadGame(level) {
 
@@ -29,6 +30,7 @@ function loadGame(level) {
         },
         success: function (response) {
             makeBoard(level, response.level);
+            level_structure = response.level;
         }
     });
 
@@ -59,7 +61,7 @@ function makeBoard(id, level) {
         }
     });
     $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>0</span></div>');
-    $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="00:00" size="2"></form>');
+    $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="00:00" size="4"></form>');
     clock_reset();
     clock_stop();
 
@@ -119,16 +121,67 @@ function clock_stop(){
     timestart = null;
 }
 
+function fairPlay(check){
+    if(check == level_structure){
+        return true;
+    }else{
+        $('#game').modal('hide');
+        $('#modalTrampa').modal('show');
+        $.ajax({
+            url: '/Codeigniter/Main/deleteUse/' + structure,
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+            }
+        });
+        return false;
+    }
+}
+
+
+function getStructure(){
+    var structure = "";
+    var position = $('#board .position');
+    position.each(function(){
+        if($(this).hasClass('active')){
+            structure += "1";
+        }else{
+            structure += "0";
+        }
+    });
+    return structure;
+}
+
+function saveLevel() {
+    $('#board').modal('hide');
+    var structure = getStructure();
+    $.ajax({
+        url: '/Codeigniter/game/saveGameTmp/' + structure,
+        type: 'post',
+        dataType: 'json',
+        success: function (response) {
+            console.log(response);
+        }
+    });
+}
+
 function play(elem) {
     countMoves();
     var row = elem.parent().data('row');
     var col = elem.data('col');
+
+    if(fairPlay(getStructure())==false){
+        return false;
+    }
 
     elem.toggleClass('active');
     $('.row[data-row="' + (row + 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
     $('.row[data-row="' + (row) + '"] .position[data-col="' + (col + 1) + '"]').toggleClass('active');
     $('.row[data-row="' + (row) + '"] .position[data-col="' + (col - 1) + '"]').toggleClass('active');
     $('.row[data-row="' + (row - 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
+
+    level_structure = getStructure();
 
     if ($('#board .active').size() == 0) {
         clock_stop();

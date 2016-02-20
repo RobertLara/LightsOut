@@ -26,7 +26,7 @@
 <div id="headerwrap">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-lg-offset-2 col-md-6 col-xs-12 col-sm-10 col-sm-offset-0 col-md-offset-2 col-xs-offset-0 col-l-offset-2">
+            <div class="col-lg-4 col-lg-offset-2 col-md-6 col-xs-12 col-sm-9 col-sm-offset-1 col-md-offset-3 col-xs-offset-0 col-l-offset-2">
 
                 <table class="table table-striped custab">
                     <thead>
@@ -49,7 +49,7 @@
 
 
             </div>
-            <div class="col-lg-4 col-md-offset-1 col-md-6 col-xs-12 col-sm-10   ">
+            <div class="col-lg-4 col-md-offset-4 col-md-4 col-xs-9 col-sm-9 col-sm-offset-3 col-xs-offset-3">
 
 
                 <?php echo validation_errors('<p class="error">'); ?>
@@ -78,7 +78,7 @@
 
 
         </div>
-        <div class="row col-md-offset-2 col-sm-offset-2">
+        <div class="row col-md-offset-4 col-lg-offset-4 col-sm-offset-4 col-xs-offset-4 col-xs-6 col-sm-8 col-md-8">
             <button id="openMakeBoard" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#makeBoard">Crear nou nivell</button>
         </div>
     </div>

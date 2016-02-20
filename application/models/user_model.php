@@ -38,7 +38,8 @@ class User_model extends CI_Model
             'role' => 0
         );
         $this->db->insert('users', $data);
-        return true;
+        $num_inserts = $this->db->affected_rows();
+        return ($num_inserts == 1) ? true : false;
     }
 
     public function userExists($username)

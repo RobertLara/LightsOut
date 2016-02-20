@@ -34,7 +34,22 @@ class Game extends CI_Controller {
         if($level==null){
             echo json_encode(array('error'=>"level not set",'level'=>null));
         }else{
-            echo json_encode(array('level'=>$this->lightout_model->getGame($level)));
+            if($this->session->userdata('logged_in')){
+                $id_user = $this->session->userdata['id_user'];
+                $tmp = $this->lightout_model->getGameTmp($id_user,$level);
+
+                if($tmp==false){
+                    echo json_encode(array('id'=>$level,'level'=>$this->lightout_model->getGame($level)));
+                }else{
+                    echo json_encode(array('save'=>$tmp,'level'=>$this->lightout_model->getGame($level)));
+                }
+
+
+            }else{
+                echo json_encode(array('id'=>$level,'level'=>$this->lightout_model->getGame($level)));
+            }
+
+
         }
     }
 
@@ -120,6 +135,7 @@ class Game extends CI_Controller {
     function saveGameTmp($level,$structure,$time,$clicks){
         if($this->session->userdata('logged_in')){
             $id_user = $this->session->userdata['id_user'];
+            $time = "00:".$time;
             if($this->lightout_model->saveGameTmp($id_user,$level,$structure,$time,$clicks)){
                 echo json_encode(array('response'=>"Partida desada"));
             }else{

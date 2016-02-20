@@ -26,7 +26,7 @@
 <div id="headerwrap">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-lg-offset-2 col-md-6 col-xs-12 col-sm-10 col-sm-offset-2">
+            <div class="col-lg-4 col-lg-offset-2 col-md-6 col-xs-12 col-sm-10 col-sm-offset-0 col-md-offset-2 col-xs-offset-0 col-l-offset-2">
 
                 <table class="table table-striped custab">
                     <thead>

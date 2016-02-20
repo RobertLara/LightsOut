@@ -126,8 +126,14 @@ class Main extends CI_Controller
 
     public function deleteMyAccount(){
         if($this->session->userdata('logged_in')){
-            $id_user = $this->session->userdata['id_user'];
-            $this->user_model->deleteUser($id_user);
+            if ($this->session->userdata('role') != 1) {
+                $id_user = $this->session->userdata['id_user'];
+                $this->user_model->deleteUser($id_user);
+            }else{
+                echo json_encode(array('response'=>"Ets l'administrador"));
+            }
+        }else{
+            echo json_encode(array('response'=>"No esta registrat"));
         }
     }
 

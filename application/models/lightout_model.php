@@ -200,6 +200,8 @@ class LightOut_model extends CI_Model
 
     public function saveGameTmp($id_user, $level,$structure,$time,$clicks){
 
+        $this->deleteGameTmp($id_user,$level);
+
         $data = array(
             'id_level' => $level,
             'id_user' => $id_user,
@@ -229,10 +231,9 @@ class LightOut_model extends CI_Model
         $this->db->where('id_level', $level);
         $this->db->where('id_user', $id_user);
         $response = $this->db->get()->result();
-        var_dump($response);
 
-        if (isset($response[0])) {
-            return $response[0];
+        if (isset($response[0]->time)) {
+            return array('id'=>$level ,'status'=>$response[0]->status,'time'=>$response[0]->time,'clicks'=>$response[0]->clicks);
         } else {
             return false;
         }

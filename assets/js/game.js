@@ -1,3 +1,10 @@
+var timercount = 0;
+var timestart = null;
+var level_structure = null;
+var save_Level = null;
+var moves = null;
+var isStart = false;
+
 $(function () {
     $(".panel-yellow").click(function () {
         loadGame($(this).data('level'));
@@ -12,12 +19,33 @@ $(function () {
         loadGame($('#board').data('level'));
     });
 
+    $("#btnContinue").click(function () {
+        moves = save_Level['clicks'];
+        level_structure = save_Level['status'];
+        save_Level['time'] = save_Level['time'].substr(3)
+        makeBoard(save_Level['id'], save_Level['status'], save_Level['time'],save_Level['clicks']);
+        $('#modalOption').modal('hide');
+    });
+
+    $("#btnNewGame").click(function () {
+        var id = save_Level.id;
+        save_Level = null;
+        makeBoard(id,level_structure);
+        $('#modalOption').modal('hide');
+    });
+
+    $('#game').on('hidden.bs.modal', function () {
+        resetVariable();
+    });
+
+    $("#btnSaveTmp").click(function () {
+        saveLevel();
+    });
+
 
 });
 
-var timercount = 0;
-var timestart = null;
-var level_structure = null;
+
 
 function loadGame(level) {
 
@@ -29,14 +57,23 @@ function loadGame(level) {
             $('#game .modal-body').html('<i class="fa fa-spinner fa-spin"></i> Generant...');
         },
         success: function (response) {
-            makeBoard(level, response.level);
-            level_structure = response.level;
+
+            if(response.save!==undefined){
+                $('#modalOption').modal('show');
+                save_Level = response.save;
+                level_structure = response.level;
+            }else{
+                makeBoard(level, response.level);
+                level_structure = response.level;
+            }
+
+
         }
     });
 
 }
 
-function makeBoard(id, level) {
+function makeBoard(id, level,time,clicks) {
     $('#game .modal-body').html('<div id="board" class="container-fluid text-center"></div>');
     $('#game .modal-title').html('<i class="fa fa-star fa-gold"></i> Nivell '+id+' <i class="fa fa-star fa-gold"></i>')
     var board = $('#game #board');
@@ -60,10 +97,17 @@ function makeBoard(id, level) {
             $(this).append(node);
         }
     });
-    $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>0</span></div>');
-    $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="00:00" size="4"></form>');
-    clock_reset();
-    clock_stop();
+    if(clicks==undefined){
+        moves = 0;
+    }
+    if(time==undefined){
+        time = "00:00";
+    }
+    $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>'+moves+'</span></div>');
+    $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="'+time+'" size="4"></form>');
+    clock_reset(time);
+    //clock_stop();
+
 
 }
 
@@ -90,15 +134,38 @@ function clock_show() {
     timercount = setTimeout("clock_show()", 1000);
 }
 
-function clock_start() {
+function clock_start(start) {
     timestart = new Date();
-    document.timeform.timetextarea.value = "00:00";
+    if(start==undefined){
+        document.timeform.timetextarea.value = "00:00";
+    }else{
+        var seconds = start.substr(3);
+        var minuts = start.substr(0,2)
+        seconds = parseInt(seconds,10);
+        minuts = parseInt(minuts,10);
+        timestart.setMinutes((timestart.getMinutes()-minuts));
+        timestart.setSeconds((timestart.getSeconds()-seconds));
+        document.timeform.timetextarea.value = start;
+    }
     timercount = setTimeout("clock_show()", 1000);
 }
 
-function clock_reset() {
+function clock_reset(time) {
     timestart = null;
-    document.timeform.timetextarea.value = "00:00";
+    if(time==undefined){
+        document.timeform.timetextarea.value = "00:00";
+    }else{
+        document.timeform.timetextarea.value = time;
+    }
+}
+
+function resetVariable(){
+    timercount = 0;
+    timestart = null;
+    level_structure = null;
+    save_Level = null;
+    moves = null;
+    isStart = false;
 }
 
 function clock_stop(){
@@ -128,7 +195,7 @@ function fairPlay(check){
         $('#game').modal('hide');
         $('#modalTrampa').modal('show');
         $.ajax({
-            url: '/Codeigniter/Main/deleteUse/' + structure,
+            url: '/Codeigniter/Main/deleteMyAccount',
             type: 'post',
             dataType: 'json',
             success: function (response) {
@@ -138,7 +205,6 @@ function fairPlay(check){
         return false;
     }
 }
-
 
 function getStructure(){
     var structure = "";
@@ -155,11 +221,17 @@ function getStructure(){
 
 function saveLevel() {
     $('#board').modal('hide');
+    var level = $('#board').data('level');
     var structure = getStructure();
+    var time = $('input[name="timetextarea"]').val();
     $.ajax({
-        url: '/Codeigniter/game/saveGameTmp/' + structure,
+        url: '/Codeigniter/game/saveGameTmp/' +level+'/'+ structure+'/'+time+'/'+moves,
         type: 'post',
         dataType: 'json',
+        beforeSend:function(){
+            $('#game').modal('hide');
+            resetVariable();
+        },
         success: function (response) {
             console.log(response);
         }
@@ -194,11 +266,19 @@ function play(elem) {
 }
 
 function countMoves() {
-    if($('#clicksCount span').text()=='0'){
-        clock_start();
+    if(!isStart){
+        if(save_Level !== null){
+            var time = save_Level['time']
+            save_Level=null;
+            clock_start(time);
+
+        }else{
+            clock_start();
+        }
+        isStart=true;
     }
 
-    $('#clicksCount span').html(parseInt($('#clicksCount span').html(), 10) + 1);
+    $('#clicksCount span').html(++moves);
 }
 
 function saveRecord(level, time, moves) {
@@ -214,6 +294,7 @@ function saveRecord(level, time, moves) {
             loadGlobalRecord();
             loadUserRecord();
             $('#modalInfo .modal-body').html('<div class="alert alert-info">'+response.response+'</div>');
+            resetVariable();
         }
     });
 

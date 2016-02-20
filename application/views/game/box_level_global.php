@@ -1,5 +1,5 @@
 <!-- Block  -->
-<div class="col-lg-3 col-md-4">
+<div class="col-lg-3 col-md-4 col-xs-6">
     <div class="panel panel-yellow" data-level="<?php echo $i+1;?>">
         <div class="panel-heading">
             <div class="row">

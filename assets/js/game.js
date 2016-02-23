@@ -199,7 +199,7 @@ function fairPlay(check){
             type: 'post',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+
             }
         });
         return false;
@@ -233,7 +233,7 @@ function saveLevel() {
             resetVariable();
         },
         success: function (response) {
-            console.log(response);
+
         }
     });
 }
@@ -307,13 +307,12 @@ function loadUserRecord() {
         type: 'post',
         dataType: 'json',
         success: function (response) {
-            console.log(response);
             var box = $('#recordUser .panel-yellow');
             $(box).each(function (i, value) {
                 if (response.getUserRankingTime[i].time !== null) {
                     $('.fa-clock-o', this).prev().html(response.getUserRankingTime[i].time);
                 }
-                if (response.getUserRankingMoves[i].moves !== 0) {
+                if (response.getUserRankingMoves[i].moves !== null) {
                     $('.fa-hand-pointer-o', this).prev().html(response.getUserRankingMoves[i].moves);
                 }
 
@@ -332,10 +331,10 @@ function loadGlobalRecord() {
             var box = $('#recordGlobal .panel-yellow');
             $(box).each(function (i, value) {
                 if (response.getRankingTime[i].time !== null) {
-                    $('.fa-clock-o', this).prev().html(response.getRankingTime[i].time);
+                    $('.fa-clock-o', this).parent().html('<span class="username">'+response.getRankingTime[i].username+'</span><span>'+response.getRankingTime[i].time+'</span><i class="fa fa-clock-o"></i>');
                 }
                 if (response.getRankingMoves[i].moves !== 0) {
-                    $('.fa-hand-pointer-o', this).prev().html(response.getRankingMoves[i].moves);
+                    $('.fa-hand-pointer-o', this).parent().html('<span class="username">'+response.getRankingMoves[i].username+'</span><span>'+response.getRankingMoves[i].moves+'</span><i class="fa fa-hand-pointer-o"></i>');
                 }
 
 

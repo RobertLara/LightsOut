@@ -1,5 +1,5 @@
 $(function() {
-    setInterval(loadGlobalRecord, 100000);
+    setInterval(loadGlobalRecord, 60000);   //Crida cada 1 minut
 
     $('#showGlobal').click(function(){
         if(!$(this).hasClass('active')){

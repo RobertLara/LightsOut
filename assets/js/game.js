@@ -45,8 +45,6 @@ $(function () {
 
 });
 
-
-
 function loadGame(level) {
 
     $.ajax({
@@ -159,15 +157,6 @@ function clock_reset(time) {
     }
 }
 
-function resetVariable(){
-    timercount = 0;
-    timestart = null;
-    level_structure = null;
-    save_Level = null;
-    moves = null;
-    isStart = false;
-}
-
 function clock_stop(){
     if (timercount){
         clearTimeout(timercount);
@@ -186,6 +175,15 @@ function clock_stop(){
         document.timeform.timetextarea.value = minutesPassed+":"+secondsPassed;
     }
     timestart = null;
+}
+
+function resetVariable(){
+    timercount = 0;
+    timestart = null;
+    level_structure = null;
+    save_Level = null;
+    moves = null;
+    isStart = false;
 }
 
 function fairPlay(check){

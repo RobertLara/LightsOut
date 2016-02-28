@@ -12,7 +12,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info pull-left" data-dismiss="modal">Tancar</button>
-                <button id="btnSaveTmp" type="button" class="btn btn-success" data-dismiss="modal">Guardar partida</button>
+                <?php if ($this->session->userdata('logged_in')): ?>
+                    <button id="btnSaveTmp" type="button" class="btn btn-success" data-dismiss="modal">Guardar partida</button>
+                <?php endif; ?>
             </div>
         </div>
 

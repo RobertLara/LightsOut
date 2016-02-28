@@ -42,13 +42,7 @@ class Main extends CI_Controller
             $this->index();
         else {
             $data['msg'] = 'Error de credencials';
-
-            $this->load->helper('url');
-            $this->load->view('tpl/header');
-            $this->load->view('tpl/headerNavbar');
-
-            $this->load->view('home/index', $data);
-            $this->load->view('tpl/footer');
+            $this->index();
         }
     }
 
@@ -143,6 +137,8 @@ class Main extends CI_Controller
             if ($this->session->userdata('role') != 1) {
                 $id_user = $this->session->userdata['id_user'];
                 $this->user_model->deleteUser($id_user);
+                $this->session->sess_destroy();
+                echo json_encode(array('response' => "Compte eliminat"));
             } else {
                 echo json_encode(array('response' => "Ets l'administrador"));
             }

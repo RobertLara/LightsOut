@@ -197,7 +197,7 @@ function fairPlay(check){
             type: 'post',
             dataType: 'json',
             success: function (response) {
-
+                window.location.href = '/Codeigniter';
             }
         });
         return false;

@@ -329,7 +329,7 @@ function loadGlobalRecord() {
                 if (response.getRankingTime[i].time !== null) {
                     $('.fa-clock-o', this).parent().html('<span class="username">'+response.getRankingTime[i].username+'</span><span>'+response.getRankingTime[i].time+'</span><i class="fa fa-clock-o"></i>');
                 }
-                if (response.getRankingMoves[i].moves !== 0) {
+                if (response.getRankingMoves[i].moves !== 0 && response.getRankingMoves[i].moves !== null) {
                     $('.fa-hand-pointer-o', this).parent().html('<span class="username">'+response.getRankingMoves[i].username+'</span><span>'+response.getRankingMoves[i].moves+'</span><i class="fa fa-hand-pointer-o"></i>');
                 }
             });

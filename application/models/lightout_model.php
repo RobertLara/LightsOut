@@ -13,12 +13,25 @@ class LightOut_model extends CI_Model
         $nGames = $this->getGames();
 
         for ($i = 0; $i < $nGames; $i++) {
+
+            $this->db->select('min(time) as time');
+            $this->db->from('ranking');
+            $this->db->where('id_level', ($i + 1));
+            $this->db->limit(1);
+            $response = $this->db->get()->result();
+            if($response == array()){
+                $time = -1;
+            }else{
+                $time = $response[0]->time;
+            }
+
+
             $this->db->select('username , ranking.id_level, min(time) as time');
             $this->db->from('ranking');
             $this->db->join('levels', 'levels.id_level=ranking.id_level');
             $this->db->join('users', 'ranking.id_user=users.id_user');
             $this->db->where('ranking.id_level', ($i + 1));
-            $this->db->group_by("ranking.id_level");
+            $this->db->where('ranking.time', $time);
             $response = $this->db->get()->result();
 
             if ($response == array()) {
@@ -41,12 +54,23 @@ class LightOut_model extends CI_Model
         $nGames = $this->getGames();
 
         for ($i = 0; $i < $nGames; $i++) {
+            $this->db->select('min(clicks) as moves');
+            $this->db->from('ranking');
+            $this->db->where('id_level', ($i + 1));
+            $this->db->limit(1);
+            $response = $this->db->get()->result();
+            if($response == array()){
+                $clicks = -1;
+            }else{
+                $clicks = $response[0]->moves;
+            }
+
             $this->db->select('username , ranking.id_level, min(clicks) as moves');
             $this->db->from('ranking');
             $this->db->join('levels', 'levels.id_level=ranking.id_level');
             $this->db->join('users', 'ranking.id_user=users.id_user');
             $this->db->where('ranking.id_level', ($i + 1));
-            $this->db->group_by("ranking.id_level");
+            $this->db->where('ranking.clicks', $clicks);
             $response = $this->db->get()->result();
 
             if ($response == array()) {

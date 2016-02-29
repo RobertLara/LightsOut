@@ -104,8 +104,6 @@ function makeBoard(id, level,time,clicks) {
     $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>'+moves+'</span></div>');
     $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="'+time+'" size="4"></form>');
     clock_reset(time);
-    //clock_stop();
-
 
 }
 
@@ -334,8 +332,6 @@ function loadGlobalRecord() {
                 if (response.getRankingMoves[i].moves !== 0) {
                     $('.fa-hand-pointer-o', this).parent().html('<span class="username">'+response.getRankingMoves[i].username+'</span><span>'+response.getRankingMoves[i].moves+'</span><i class="fa fa-hand-pointer-o"></i>');
                 }
-
-
             });
         }
     });

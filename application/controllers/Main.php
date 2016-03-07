@@ -10,7 +10,7 @@ class Main extends CI_Controller
         $this->load->model('lightout_model');
     }
 
-    public function index()
+    public function index($msg = null)
     {
         $data['js_to_load'] = array('home.js', 'game.js');  //Llibreries JS a utilitzar
 
@@ -26,13 +26,17 @@ class Main extends CI_Controller
             $data['getUserRankingMoves'] = $this->lightout_model->getUserRankingMoves($id_user);
         }
 
+        if($msg !== null){
+            $data['msg'] = $msg;
+        }
+
         //Carrga la vista
         $this->load->helper('url');
         $this->load->view('tpl/header');
         $this->load->view('tpl/headerNavbar');
         $this->load->view('tpl/modalGame');
         $this->load->view('home/index', $data);
-        $this->load->view('tpl/footer');
+        $this->load->view('tpl/footer',$data);
 
     }
 
@@ -45,19 +49,21 @@ class Main extends CI_Controller
         if ($result)
             $this->index();
         else {
-            $data['msg'] = 'Error de credencials';
-            $this->index();
+            $this->index('Error de credencials');
         }
     }
 
-    public function register()
+    public function register($msg = null)
     {
+        if($msg !== null){
+            $data['msg'] = $msg;
+        }
         //Carrega les vista del registre
         $this->load->helper('url');
         $this->load->view('tpl/header');
 
         $this->load->view('register/index');
-        $this->load->view('tpl/footer');
+        $this->load->view('tpl/footer',$data);
     }
 
     public function registration()
@@ -75,14 +81,14 @@ class Main extends CI_Controller
                 } else {
 
                     if ($this->user_model->register()) {
-                        $this->index();
+                        $this->index("Registre correcte. Inicia sessió");
                     } else {
-                        $this->register();
+                        $this->register("Error registrar");
                     }
 
                 }
             } else {
-                $this->register();
+                $this->register("Error al regsitrar. Aquest usuari ja existeix");
             }
 
         }

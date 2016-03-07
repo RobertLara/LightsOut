@@ -30,6 +30,10 @@ if(isset($js_to_load)){
 
 }
 
+if(isset($msg)){
+    echo '<script>jQuery(function() {jQuery("#msgModal").modal("show");jQuery("#msgModal .modal-body").html("<p>'.$msg.'</p>")});</script>';
+}
+
 ?>
 
     </body>

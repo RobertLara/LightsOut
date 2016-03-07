@@ -1,3 +1,4 @@
+<!-- Modal del joc -->
 <div id="game" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
@@ -12,7 +13,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info pull-left" data-dismiss="modal">Tancar</button>
-                <?php if ($this->session->userdata('logged_in')): ?>
+                <?php if ($this->session->userdata('logged_in')): //El usuaris registrat poden desar una partida?>
                     <button id="btnSaveTmp" type="button" class="btn btn-success" data-dismiss="modal">Guardar partida</button>
                 <?php endif; ?>
             </div>
@@ -20,7 +21,7 @@
 
     </div>
 </div>
-
+<!-- Modal que mostrara informació referent al joc -->
 <div id="modalInfo" class="modal fade" data-backdrop="static" data-keyboard="false"  role="dialog">
     <div class="modal-dialog">
 
@@ -40,6 +41,7 @@
     </div>
 </div>
 
+<!-- Modal en cas de partides desades -->
 <div id="modalOption" class="modal fade" data-backdrop="static" data-keyboard="false"  role="dialog">
     <div class="modal-dialog">
 
@@ -62,6 +64,7 @@
     </div>
 </div>
 
+<!-- Modal per informar de detecció de trampes -->
 <div id="modalTrampa" class="modal fade" data-backdrop="static" data-keyboard="false"  role="dialog">
     <div class="modal-dialog">
 

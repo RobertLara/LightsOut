@@ -123,7 +123,7 @@
     <article class="container-login center-block">
         <section>
             <ul id="top-bar" class="nav nav-tabs nav-justified">
-                <li><a href="<?php echo base_url(); ?>">Accedir</a></li>
+                <li><a href="<?php echo base_url(); //Redirigeix al home?>">Accedir</a></li>
                 <li class="active"><a href="<?php base_url('/main/register'); ?>">Registrar-se</a></li>
             </ul>
             <div class="tab-content tabs-login col-lg-12 col-md-12 col-sm-12 cols-xs-12">

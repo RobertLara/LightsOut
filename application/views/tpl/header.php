@@ -20,13 +20,14 @@
 
         <?php
 
+        //Fitxer CSS a importar sí estan indicats
         if(isset($css_to_load)){
             var_dump($css_to_load);
             if(is_array($css_to_load)){
 
                 foreach($css_to_load as $file){
                     echo '<link rel="stylesheet" href="';
-                    if(substr($file,0,2)=='//'){
+                    if(substr($file,0,2)=='//'){    //En cas de recurs extern
                         echo $file;
                     }else{
                         echo base_url("assets/css/".$file);
@@ -35,7 +36,7 @@
                 }
             }else{
                 echo '<link rel="stylesheet" href="';
-                if(substr($file,0,2)=='//'){
+                if(substr($file,0,2)=='//'){    //En cas de recurs extern
                     echo $file;
                 }else{
                     echo base_url("assets/css/".$$css_to_load);

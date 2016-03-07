@@ -12,13 +12,13 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="<?php echo base_url(); ?>">Inici</a></li>
 
-                <?php if ($this->session->userdata('logged_in')): ?>
-                    <?php if ($this->session->userdata('role')==1): ?>
+                <?php if ($this->session->userdata('logged_in')): //En cas d'suaris logats ?>
+                    <?php if ($this->session->userdata('role')==1): //En cas d'administrador?>
                         <li><a href="<?php echo base_url('main/dashboard'); ?>">Gestió</a></li>
                     <?php endif; ?>
                     <li><a href="<?php echo base_url('game'); ?>">Panell de control</a></li>
                     <li><a href="<?php echo base_url('main/logout');?>">Tancar sessió</a></li>
-                <?php else: ?>
+                <?php else: //En cas d'usuaris no logats?>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Entrar</b> <span class="caret"></span></a>
                         <ul id="login-dp" class="dropdown-menu">

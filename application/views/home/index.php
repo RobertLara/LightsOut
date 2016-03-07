@@ -5,7 +5,7 @@
 
                 <div class="row text-center">
                     <button id="showGlobal" type="button" class="btn btn-success active">Records Globals</button>
-                    <?php if ($this->session->userdata('logged_in')): ?>
+                    <?php if ($this->session->userdata('logged_in')): //En cas de jugadors logats es mostra l'opció ?>
                         <button id="showUser" type="button" class="btn btn-success">Records Personals</button>
                     <?php endif; ?>
                 </div>
@@ -14,7 +14,7 @@
                 <div class="row" id="recordGlobal">
 
                     <?php
-
+                    //Mostra els records globals
                     if (isset($getGames)) {
 
                         for ($i = 0; $i < $getGames; $i++) {
@@ -25,11 +25,11 @@
                     ?>
                 </div>
 
-                <?php if ($this->session->userdata('logged_in')): ?>
+                <?php if ($this->session->userdata('logged_in')): //En cas de jugadors logats (poden guardar records personals)?>
                 <div class="row" id="recordUser">
 
                     <?php
-
+                    //Si esta declarada la varaible carrega els jocs d'usuari
                     if (isset($getGames)) {
 
                         for ($i = 0; $i < $getGames; $i++) {

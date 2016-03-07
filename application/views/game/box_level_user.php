@@ -4,11 +4,12 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-12 text-right">
+                    <!-- Nivell amb estrelles -->
                     <div class="huge"><i class="fa fa-star"></i><?php echo $i + 1; ?><i class="fa fa-star"></i></div>
                     <div>
                         <span>
                         <?php
-                        if ($getUserRankingTime[$i]->time == null) {
+                        if ($getUserRankingTime[$i]->time == null) {    //En cas de no estar definit cap record
                             echo "No definit";
                         } else {
                             echo $getUserRankingTime[$i]->time;
@@ -20,7 +21,7 @@
                     <div>
                         <span>
                         <?php
-                        if ($getUserRankingMoves[$i]->moves == 0){
+                        if ($getUserRankingMoves[$i]->moves == 0){    //En cas de no estar definit cap record
                             echo "No definit";
                         }else{
                             echo $getUserRankingMoves[$i]->moves;

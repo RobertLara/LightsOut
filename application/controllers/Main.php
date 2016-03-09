@@ -55,6 +55,7 @@ class Main extends CI_Controller
 
     public function register($msg = null)
     {
+        $data = array();
         if($msg !== null){
             $data['msg'] = $msg;
         }
@@ -69,7 +70,13 @@ class Main extends CI_Controller
     public function registration()
     {
         if (strlen($this->input->post('username')) < 3 || strlen($this->input->post('password')) < 4) {
-            $this->register();
+
+            if ($this->session->userdata('logged_in') && $this->session->userdata('role') == 1) {
+                $this->dashboard("Longituds insuficients");
+            }else{
+                $this->register("Longituds insuficients");
+            }
+
         } else {
             if ($this->user_model->userExists($this->input->post('username')) == 0) {
 
@@ -88,7 +95,12 @@ class Main extends CI_Controller
 
                 }
             } else {
-                $this->register("Error al regsitrar. Aquest usuari ja existeix");
+
+                if ($this->session->userdata('logged_in') && $this->session->userdata('role') == 1) {
+                    $this->dashboard("Error al regsitrar. Aquest usuari ja existeix");
+                }else{
+                    $this->register("Error al regsitrar. Aquest usuari ja existeix");
+                }
             }
 
         }
@@ -108,8 +120,12 @@ class Main extends CI_Controller
         redirect(base_url());   //Torna a inici
     }
 
-    public function dashboard()
+    public function dashboard($msg = null)
     {
+        $data = array();
+        if($msg !== null){
+            $data['msg'] = $msg;
+        }
 
         //Accés només per a usuaris administradors
         if ($this->session->userdata('role') != 1) {
@@ -126,7 +142,7 @@ class Main extends CI_Controller
         $this->load->view('tpl/header');
         $this->load->view('tpl/headerNavbar');
         $this->load->view('dashboard/index', $data);
-        $this->load->view('tpl/footer');
+        $this->load->view('tpl/footer',$data);
 
     }
 

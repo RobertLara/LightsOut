@@ -1,3 +1,4 @@
+//Varaibles predefinides
 var timercount = 0;
 var timestart = null;
 var level_structure = null;
@@ -6,19 +7,23 @@ var moves = null;
 var isStart = false;
 
 $(function () {
+    //Acció que permet jugar al nivell seleccionat
     $(".panel-yellow").click(function () {
         loadGame($(this).data('level'));
         $('#game').modal('show');
     });
 
+    //Tanca el modal de joc
     $("#btnCloseGame").click(function () {
         $('#game').modal('hide');
     });
 
+    //Torna a jugar al nivell anterior
     $("#btnReloadGame").click(function () {
         loadGame($('#board').data('level'));
     });
 
+    //Continua amb una partida desada
     $("#btnContinue").click(function () {
         moves = save_Level['clicks'];
         level_structure = save_Level['status'];
@@ -27,6 +32,7 @@ $(function () {
         $('#modalOption').modal('hide');
     });
 
+    //Ignora la partida desada i juga al nivell per defecte
     $("#btnNewGame").click(function () {
         var id = save_Level.id;
         save_Level = null;
@@ -34,10 +40,12 @@ $(function () {
         $('#modalOption').modal('hide');
     });
 
+    //Neteja la varaibles al tancar el modal
     $('#game').on('hidden.bs.modal', function () {
         resetVariable();
     });
 
+    //Guarda la partida en l'estat actual
     $("#btnSaveTmp").click(function () {
         saveLevel();
     });
@@ -45,13 +53,14 @@ $(function () {
 
 });
 
+//Carrega el joc
 function loadGame(level) {
 
     $.ajax({
-        url: '/Codeigniter/game/getGame/' + level,
+        url: '/Codeigniter/game/getGame/' + level,  //Recurs
         type: 'post',
         dataType: 'json',
-        beforeSend: function () {
+        beforeSend: function () {   //Mentres fa la petició
             $('#game .modal-body').html('<i class="fa fa-spinner fa-spin"></i> Generant...');
         },
         success: function (response) {
@@ -71,14 +80,20 @@ function loadGame(level) {
 
 }
 
+//Crear el tauler
 function makeBoard(id, level,time,clicks) {
     $('#game .modal-body').html('<div id="board" class="container-fluid text-center"></div>');
+    //Mostrar el nivell en el header
     $('#game .modal-title').html('<i class="fa fa-star fa-gold"></i> Nivell '+id+' <i class="fa fa-star fa-gold"></i>')
     var board = $('#game #board');
     board.attr('data-level', id);
+
+    //Crear les cinc files del tauler
     for (var i = 0; i < 5; i++) {
         $(board).append('<div class="row" data-row="' + i + '"></div>');
     }
+
+    //Crear l'estructura de les caixes
     var rows = $(board).find('.row');
     $(rows).each(function (index, value) {
         for (var i = 0; i < 5; i++) {
@@ -95,18 +110,21 @@ function makeBoard(id, level,time,clicks) {
             $(this).append(node);
         }
     });
-    if(clicks==undefined){
+    if(clicks==undefined){  //Clicks per defecte
         moves = 0;
     }
-    if(time==undefined){
+    if(time==undefined){    //Temps per defecte
         time = "00:00";
     }
+
+    //Mostra el temps i els clics
     $(board).append('<div id="clicksCount" class="pull-left">Clicks: <span>'+moves+'</span></div>');
     $(board).append('<form name="timeform" class="pull-right">Temps: <input class="text-right" type=text name="timetextarea" value="'+time+'" size="4"></form>');
     clock_reset(time);
 
 }
 
+//Mostra el rellotge
 function clock_show() {
     if (timercount) {
         clearTimeout(timercount);
@@ -127,9 +145,10 @@ function clock_show() {
         seconds_passed = "0" + seconds_passed;
     }
     document.timeform.timetextarea.value = minutes_passed + ":" + seconds_passed;
-    timercount = setTimeout("clock_show()", 1000);
+    timercount = setTimeout("clock_show()", 1000);  //Cada segon augmenta un segon el rellotge
 }
 
+//Inicia el rellotge
 function clock_start(start) {
     timestart = new Date();
     if(start==undefined){
@@ -146,6 +165,7 @@ function clock_start(start) {
     timercount = setTimeout("clock_show()", 1000);
 }
 
+//Reinicia el rellotge
 function clock_reset(time) {
     timestart = null;
     if(time==undefined){
@@ -155,6 +175,7 @@ function clock_reset(time) {
     }
 }
 
+//Atura el rellotge
 function clock_stop(){
     if (timercount){
         clearTimeout(timercount);
@@ -175,6 +196,7 @@ function clock_stop(){
     timestart = null;
 }
 
+//Deixa les variables per defecte
 function resetVariable(){
     timercount = 0;
     timestart = null;
@@ -184,29 +206,31 @@ function resetVariable(){
     isStart = false;
 }
 
+//Vigila que no es facin trampres
 function fairPlay(check){
     if(check == level_structure){
         return true;
     }else{
-        $('#game').modal('hide');
-        $('#modalTrampa').modal('show');
+        $('#game').modal('hide');   //Oculta el joc
+        $('#modalTrampa').modal('show');    //Mostra el modal de trampes
         $.ajax({
-            url: '/Codeigniter/Main/deleteMyAccount',
+            url: '/Codeigniter/Main/deleteMyAccount',   //Recurs
             type: 'post',
             dataType: 'json',
             success: function (response) {
-                window.location.href = '/Codeigniter';
+                window.location.href = '/Codeigniter';  //Redirigeix
             }
         });
         return false;
     }
 }
 
+//Retorna l'estructura actual del joc
 function getStructure(){
     var structure = "";
     var position = $('#board .position');
     position.each(function(){
-        if($(this).hasClass('active')){
+        if($(this).hasClass('active')){ //Asignem valor depenen de la classe
             structure += "1";
         }else{
             structure += "0";
@@ -215,18 +239,20 @@ function getStructure(){
     return structure;
 }
 
+//Guarda la partida sense acabar
 function saveLevel() {
     $('#board').modal('hide');
+    //Obtenim les dades de la partida
     var level = $('#board').data('level');
     var structure = getStructure();
     var time = $('input[name="timetextarea"]').val();
     $.ajax({
-        url: '/Codeigniter/game/saveGameTmp/' +level+'/'+ structure+'/'+time+'/'+moves,
+        url: '/Codeigniter/game/saveGameTmp/' +level+'/'+ structure+'/'+time+'/'+moves, //recurs
         type: 'post',
         dataType: 'json',
-        beforeSend:function(){
-            $('#game').modal('hide');
-            resetVariable();
+        beforeSend:function(){  //Mentres s'espera resposta
+            $('#game').modal('hide');   //S'oculta la partida
+            resetVariable();    //Varaibles per defecte
         },
         success: function (response) {
 
@@ -234,15 +260,17 @@ function saveLevel() {
     });
 }
 
+//Logica del joc
 function play(elem) {
-    countMoves();
-    var row = elem.parent().data('row');
-    var col = elem.data('col');
+    countMoves();   //Aumentem el valor de moviments
+    var row = elem.parent().data('row');    //Obtenim la fila
+    var col = elem.data('col'); //Obtenim la columna
 
-    if(fairPlay(getStructure())==false){
+    if(fairPlay(getStructure())==false){    //Check trampes
         return false;
     }
 
+    //Modifica els valors de les classes del seu voltant
     elem.toggleClass('active');
     $('.row[data-row="' + (row + 1) + '"] .position[data-col="' + (col) + '"]').toggleClass('active');
     $('.row[data-row="' + (row) + '"] .position[data-col="' + (col + 1) + '"]').toggleClass('active');
@@ -252,8 +280,8 @@ function play(elem) {
     level_structure = getStructure();
 
     if ($('#board .active').size() == 0) {
-        clock_stop();
-        saveRecord(
+        clock_stop();   //Atura el rellotge
+        saveRecord( //Guardar la partida
             $('#board').data('level'),
             $('input[name="timetextarea"]').val(),
             parseInt($('#clicksCount span').html(), 10)
@@ -261,49 +289,56 @@ function play(elem) {
     }
 }
 
+//Gestiona els moviments efectuats
 function countMoves() {
-    if(!isStart){
+    if(!isStart){   //Si no esta iniciada la partida
         if(save_Level !== null){
             var time = save_Level['time']
             save_Level=null;
-            clock_start(time);
+            clock_start(time);  //Inicia amb el valor desat en la base de dades
 
         }else{
-            clock_start();
+            clock_start();  //Inici amb 00:00
         }
-        isStart=true;
+        isStart=true;   //S'indica que ja ha començat la partida
     }
 
-    $('#clicksCount span').html(++moves);
+    $('#clicksCount span').html(++moves);   //Modifica el valor del DOM
 }
 
+//Desa el record de la partida
 function saveRecord(level, time, moves) {
     $.ajax({
-        url: '/Codeigniter/game/saveRecord/' + level + "/" + time + "/" + moves,
+        url: '/Codeigniter/game/saveRecord/' + level + "/" + time + "/" + moves,    //recurs
         type: 'post',
         dataType: 'json',
-        beforeSend: function () {
+        beforeSend: function () {   //Mentres es realitza la petició
             $('#modalInfo').modal('show');
             $('#modalInfo .modal-body').html("Gracies per jugar");
         },
         success: function (response) {
+            //Torna a carregar els records
             loadGlobalRecord();
             loadUserRecord();
+            //Mostra el missatge de retorn
             $('#modalInfo .modal-body').html('<div class="alert alert-info">'+response.response+'</div>');
+            //Deixa les varaible per defecte
             resetVariable();
         }
     });
 
-
 }
 
+//Carrega els records del jugador
 function loadUserRecord() {
     $.ajax({
-        url: '/Codeigniter/game/getUserRankings',
+        url: '/Codeigniter/game/getUserRankings',       //recurs
         type: 'post',
         dataType: 'json',
         success: function (response) {
             var box = $('#recordUser .panel-yellow');
+
+            //Modifica les dades DOM
             $(box).each(function (i, value) {
                 if (response.getUserRankingTime[i].time !== null) {
                     $('.fa-clock-o', this).prev().html(response.getUserRankingTime[i].time);
@@ -318,13 +353,15 @@ function loadUserRecord() {
     });
 }
 
+//Carrega els records globals
 function loadGlobalRecord() {
     $.ajax({
-        url: '/Codeigniter/game/getRankings',
+        url: '/Codeigniter/game/getRankings',   //recurs
         type: 'post',
         dataType: 'json',
         success: function (response) {
             var box = $('#recordGlobal .panel-yellow');
+            //Modifica les dades DOM
             $(box).each(function (i, value) {
                 if (response.getRankingTime[i].time !== null) {
                     $('.fa-clock-o', this).parent().html('<span class="username">'+response.getRankingTime[i].username+'</span><span>'+response.getRankingTime[i].time+'</span><i class="fa fa-clock-o"></i>');
